@@ -1,5 +1,5 @@
 {
-  "name": "@daisy-maclennan/react-grid-dnd",
+  "name": "@daisymaclennan/react-grid-dnd",
   "version": "2.1.3",
   "description": "grid style drag and drop for react",
   "main": "cjs/index.js",
