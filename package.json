@@ -1,11 +1,11 @@
 {
-  "name": "@daisy-maclennan-dblx/react-grid-dnd",
+  "name": "@daisy-maclennan/react-grid-dnd",
   "version": "2.1.3",
   "description": "grid style drag and drop for react",
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "typings": "esm/index.d.ts",
-  "author": "Ben McMahen",
+  "author": "daisymaclennan",
   "license": "MIT",
   "private": false,
   "keywords": [
