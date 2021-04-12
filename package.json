@@ -1,6 +1,6 @@
 {
   "name": "@daisymaclennan/react-grid-dnd-but-better",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "grid style drag and drop for react",
   "main": "cjs/index.js",
   "module": "esm/index.js",
