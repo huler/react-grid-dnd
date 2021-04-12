@@ -24,9 +24,9 @@
     "build": "yarn run build-esm && yarn run build-other",
     "prepublishOnly": "yarn run build"
   },
-  "homepage": "https://github.com/bmcmahen/react-grid-dnd",
+  "homepage": "https://github.com/daisymaclennan-dblx/react-grid-dnd",
   "bugs": {
-    "url": "https://github.com/bmcmahen/react-grid-dnd/issues"
+    "url": "https://github.com/daisymaclennan-dblx/react-grid-dnd/issues"
   },
   "repository": {
     "type": "git",
