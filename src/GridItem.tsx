@@ -36,7 +36,8 @@ export function GridItem({
     onMove,
     onEnd,
     grid,
-    dragging: isDragging
+    dragging: isDragging,
+    bounds
   } = context;
 
   const { columnWidth, rowHeight } = grid;
@@ -74,6 +75,7 @@ export function GridItem({
   function handleMove(state: StateType, e: ResponderEvent) {
     const x = startCoords.current[0] + state.delta[0];
     const y = startCoords.current[1] + state.delta[1];
+
     set({
       xy: [x, y],
       zIndex: "1",
@@ -137,6 +139,8 @@ export function GridItem({
         immediate: false
       });
     }
+
+    console.log('item top', top)
   }, [dragging.current, left, top]);
 
   const props = {
