@@ -139,23 +139,15 @@ export function GridDropZone({
               const scrollContainer = ref.current.closest('[data-scroll]');
 
               if(scrollContainer){
-                const scrollBounds = scrollContainer.getBoundingClientRect();
-
-                console.log('scroll container', scrollContainer)
-                console.log('scroll bounds', scrollBounds)
-                console.log('y', y)
-                console.log('bounds', bounds)
-                console.log('bottom boundary', bounds.height - scrollContainer.scrollTop + scrollContainer.clientHeight)
-
                 //touches top boundary
                 if(y <= scrollContainer.scrollTop){
                   console.log('scrolling up')
-                  scrollContainer.scrollTo(0, -500);
+                  scrollContainer.scrollTop -= 5;
                 }
                 //touches bottom boundary
                 if(y + grid.rowHeight >= scrollContainer.scrollTop + scrollContainer.clientHeight){
                   console.log('scrolling down')
-                  //scrollContainer.scrollTo(0, 500);
+                  scrollContainer.scrollTop += 5;
                 }
               }
              
