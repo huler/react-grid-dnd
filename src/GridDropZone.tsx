@@ -50,6 +50,34 @@ export function GridDropZone({
   const [placeholder, setPlaceholder] = React.useState<PlaceholderType | null>(
     null
   );
+  //Check if there is a div with the data-scroll attribute and then store it in the scrollContainer 
+  const [scrollContainer, setScrollContainer] = React.useState<Element | null>(ref.current ? ref.current.closest('[data-scroll]') : null);
+  const [scrollDir, setScrollDir] = React.useState<number>(0);
+
+  const scrollRef = React.useRef<number>(0);
+
+  const scroll = (time: number) => {
+    if(scrollContainer && scrollDir!= 0){
+      //if the scrollcontainer exists and the scroll direction isn't 0
+      //Increase the scrollTop value in the desired direction by 5
+      //Then loop through the animation again
+      scrollContainer.scrollTop = scrollContainer.scrollTop + 2 * scrollDir;
+      requestAnimationFrame(scroll);
+      return;
+    }
+    //If the scrollDir is 0 the cancel the animation --> not working
+    return () => cancelAnimationFrame(scrollRef.current);
+  }
+
+  React.useEffect(() => {
+    console.log(scrollDir)
+    //If scroll direction isn't 0 start the scrolling animation
+    if(scrollDir != 0){
+      scrollRef.current = requestAnimationFrame(scroll);
+    }
+    return () => cancelAnimationFrame(scrollRef.current); //---> never being called
+  }, [scrollDir])
+  
 
   const traverseIndex =
     traverse && !traverse.execute && traverse.targetId === id
@@ -135,21 +163,6 @@ export function GridDropZone({
 
             function onMove(state: StateType, x: number, y: number) {
               if (!ref.current) return;
-
-              const scrollContainer = ref.current.closest('[data-scroll]');
-
-              if(scrollContainer){
-                //touches top boundary
-                if(y <= scrollContainer.scrollTop){
-                  console.log('scrolling up')
-                  scrollContainer.scrollTop -= 5;
-                }
-                //touches bottom boundary
-                if(y + grid.rowHeight >= scrollContainer.scrollTop + scrollContainer.clientHeight){
-                  console.log('scrolling down')
-                  scrollContainer.scrollTop += 5;
-                }
-              }
              
               if (draggingIndex !== i) {
                 setDraggingIndex(i);
@@ -191,6 +204,23 @@ export function GridDropZone({
               } else if (placeholder) {
                 setPlaceholder(null);
               }
+
+              if(scrollContainer){
+                //touches top boundary
+                if(y <= scrollContainer.scrollTop){
+                  console.log('scrolling up')
+                  setScrollDir(-1);
+                }
+                //touches bottom boundary
+                else if(y + grid.rowHeight >= scrollContainer.scrollTop + scrollContainer.clientHeight){
+                  console.log('scrolling down')
+                  setScrollDir(1);
+                }
+                else{
+                  console.log("not touching any boundarie")
+                  setScrollDir(0);
+                }
+              }
             }
 
             /**
@@ -198,6 +228,7 @@ export function GridDropZone({
              */
 
             function onEnd(state: StateType, x: number, y: number) {
+              setScrollDir(0);
               const targetDropId = getActiveDropId(
                 id,
                 x + grid.columnWidth / 2,
@@ -233,6 +264,7 @@ export function GridDropZone({
 
             function onStart() {
               measureAll();
+              setScrollContainer(ref.current ? ref.current.closest('[data-scroll]') : null);
             }
 
             return (
