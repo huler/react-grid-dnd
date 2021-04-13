@@ -139,8 +139,6 @@ export function GridItem({
         immediate: false
       });
     }
-
-    console.log('item top', top)
   }, [dragging.current, left, top]);
 
   const props = {
