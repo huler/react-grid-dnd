@@ -56,26 +56,22 @@ export function GridDropZone({
 
   const scrollRef = React.useRef<number>(0);
 
-  const scroll = (time: number) => {
-    if(scrollContainer && scrollDir!= 0){
+  const scroll = () => {
+    if(scrollContainer && scrollDir !== 0){
       //if the scrollcontainer exists and the scroll direction isn't 0
       //Increase the scrollTop value in the desired direction by 5
       //Then loop through the animation again
-      scrollContainer.scrollTop = scrollContainer.scrollTop + 2 * scrollDir;
-      requestAnimationFrame(scroll);
-      return;
+      scrollContainer.scrollTop = scrollContainer.scrollTop + 10 * scrollDir;
+      scrollRef.current = requestAnimationFrame(scroll);
     }
-    //If the scrollDir is 0 the cancel the animation --> not working
-    return () => cancelAnimationFrame(scrollRef.current);
   }
 
   React.useEffect(() => {
-    console.log(scrollDir)
     //If scroll direction isn't 0 start the scrolling animation
-    if(scrollDir != 0){
+    if(scrollDir !== 0){
       scrollRef.current = requestAnimationFrame(scroll);
     }
-    return () => cancelAnimationFrame(scrollRef.current); //---> never being called
+    return () => cancelAnimationFrame(scrollRef.current);
   }, [scrollDir])
   
 
@@ -168,6 +164,8 @@ export function GridDropZone({
                 setDraggingIndex(i);
               }
 
+              console.log(y)
+
               const targetDropId = getActiveDropId(
                 id,
                 x + grid.columnWidth / 2,
@@ -208,16 +206,13 @@ export function GridDropZone({
               if(scrollContainer){
                 //touches top boundary
                 if(y <= scrollContainer.scrollTop){
-                  console.log('scrolling up')
                   setScrollDir(-1);
                 }
                 //touches bottom boundary
                 else if(y + grid.rowHeight >= scrollContainer.scrollTop + scrollContainer.clientHeight){
-                  console.log('scrolling down')
                   setScrollDir(1);
                 }
                 else{
-                  console.log("not touching any boundarie")
                   setScrollDir(0);
                 }
               }
