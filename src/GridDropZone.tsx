@@ -163,9 +163,7 @@ export function GridDropZone({
               if (draggingIndex !== i) {
                 setDraggingIndex(i);
               }
-
-              console.log(y)
-
+              
               const targetDropId = getActiveDropId(
                 id,
                 x + grid.columnWidth / 2,
