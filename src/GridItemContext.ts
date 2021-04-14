@@ -14,6 +14,7 @@ export interface GridItemContextType {
   onStart: () => void;
   grid: GridSettings;
   dragging: boolean;
+  bounds: object;
 }
 
 const noop = () => {

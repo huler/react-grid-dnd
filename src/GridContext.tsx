@@ -124,6 +124,7 @@ export function GridContextProvider({
 
   function getRelativePosition(targetId: string, fx: number, fy: number) {
     const { left, top } = dropRefs.current.get(targetId)!;
+
     return {
       x: fx - left,
       y: fy - top

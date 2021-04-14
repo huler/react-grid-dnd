@@ -50,6 +50,30 @@ export function GridDropZone({
   const [placeholder, setPlaceholder] = React.useState<PlaceholderType | null>(
     null
   );
+  //Check if there is a div with the data-scroll attribute and then store it in the scrollContainer 
+  const [scrollContainer, setScrollContainer] = React.useState<Element | null>(ref.current ? ref.current.closest('[data-scroll]') : null);
+  const [scrollDir, setScrollDir] = React.useState<number>(0);
+
+  const scrollRef = React.useRef<number>(0);
+
+  const scroll = () => {
+    if(scrollContainer && scrollDir !== 0){
+      //if the scrollcontainer exists and the scroll direction isn't 0
+      //Increase the scrollTop value in the desired direction by 5
+      //Then loop through the animation again
+      scrollContainer.scrollTop = scrollContainer.scrollTop + 10 * scrollDir;
+      scrollRef.current = requestAnimationFrame(scroll);
+    }
+  }
+
+  React.useEffect(() => {
+    //If scroll direction isn't 0 start the scrolling animation
+    if(scrollDir !== 0){
+      scrollRef.current = requestAnimationFrame(scroll);
+    }
+    return () => cancelAnimationFrame(scrollRef.current);
+  }, [scrollDir])
+  
 
   const traverseIndex =
     traverse && !traverse.execute && traverse.targetId === id
@@ -135,11 +159,11 @@ export function GridDropZone({
 
             function onMove(state: StateType, x: number, y: number) {
               if (!ref.current) return;
-
+             
               if (draggingIndex !== i) {
                 setDraggingIndex(i);
               }
-
+              
               const targetDropId = getActiveDropId(
                 id,
                 x + grid.columnWidth / 2,
@@ -176,6 +200,20 @@ export function GridDropZone({
               } else if (placeholder) {
                 setPlaceholder(null);
               }
+
+              if(scrollContainer){
+                //touches top boundary
+                if(y <= scrollContainer.scrollTop){
+                  setScrollDir(-1);
+                }
+                //touches bottom boundary
+                else if(y + grid.rowHeight >= scrollContainer.scrollTop + scrollContainer.clientHeight){
+                  setScrollDir(1);
+                }
+                else{
+                  setScrollDir(0);
+                }
+              }
             }
 
             /**
@@ -183,6 +221,7 @@ export function GridDropZone({
              */
 
             function onEnd(state: StateType, x: number, y: number) {
+              setScrollDir(0);
               const targetDropId = getActiveDropId(
                 id,
                 x + grid.columnWidth / 2,
@@ -218,6 +257,7 @@ export function GridDropZone({
 
             function onStart() {
               measureAll();
+              setScrollContainer(ref.current ? ref.current.closest('[data-scroll]') : null);
             }
 
             return (
@@ -235,7 +275,8 @@ export function GridDropZone({
                   onEnd,
                   onStart,
                   grid,
-                  dragging: i === draggingIndex
+                  dragging: i === draggingIndex,
+                  bounds
                 }}
               >
                 {child}
