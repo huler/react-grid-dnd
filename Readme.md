@@ -1,114 +1,63 @@
 
-  
-
 <div  align="center">
-
-  
 
 <img
 
-  
-
 max-width="300px"
-
-  
 
 alt="A demo showing views being swiped left and right."
 
-  
-
 src="https://raw.githubusercontent.com/bmcmahen/react-dnd-grid/master/demo.gif">
-
-  
 
 </div>
 
-  
-
-  
 
 # react-grid-dnd
-
-  
-
 Fork of @benmcmahen's react-grid-dnd package
-
-  
 
 [![npm package](https://img.shields.io/npm/v/react-dnd-grid/latest.svg)](https://www.npmjs.com/package/react-dnd-grid)
 
-  
-
-  
 
 Grid style drag and drop, built with React. See a live example on [codesandbox](https://codesandbox.io/embed/gracious-wozniak-kj9w8). You can also see it in action [here](https://react-gesture-responder.netlify.com/).
 
   
-
-  
-
 ## Features
-
-  
 
   
 
 -  **Supports dragging between arbitrary number of lists**.
 
-  
-
 -  **Built with [react-gesture-responder](https://github.com/bmcmahen/react-gesture-responder) to enable better control over gesture delegation.**
-
-  
 
 -  **Disable drop targets or dragging altogether**
 
-  
-
 -  **Animated with react-spring**
 
-  
-
-  
 
 ## Install
 
   
-
-  
-
 Install `@myclevergroup/react-grid-dnd-but-better` and `react-gesture-responder` using yarn or npm.
 
   
 
-  
-
 ```
-
-  
 
 yarn add @myclevergroup/react-grid-dnd-but-better react-gesture-responder
 
-  
 
 ```
-
-  
 
   
 
 ## Usage
 
   
-
-  
-
 Because `GridItem` components are rendered with absolute positioning, you need to ensure that `GridDropZone` has a specified height or flex, like in the example below.
 
   
-
-<!-- prettier-ignore -->
 ```jsx
+
 import {
   GridContextProvider,
   GridDropZone,
@@ -156,20 +105,14 @@ function Example() {
 ```
 
   
-
-  
-
 ## Dragging between lists
 
   
-
-  
-
 You can see this example in action on [codesandbox](https://codesandbox.io/embed/gracious-wozniak-kj9w8).
 
   
-<!-- prettier-ignore -->
 ```jsx
+
 import {
   GridContextProvider,
   GridDropZone,
@@ -282,9 +225,6 @@ function App() {
 
 ```
 
-
-  
-
 ## Drag scrolling
 
   
@@ -344,30 +284,17 @@ function Example() {
 
   
 
-  
-
-  
-
 ## Dev Setup for editing package locally
 
   
 
 #### Clone the repo
-
-  
-  
-
 ```
 git clone https://github.com/MyCleverGroup/react-grid-dnd.git
 ```
 
-  
-  
 
 #### Create yarn links in repo
-
-  
-
 ```
 cd react-grid-dnd
 yarn
