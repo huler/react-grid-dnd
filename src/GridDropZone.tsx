@@ -57,11 +57,12 @@ export function GridDropZone({
   const scrollRef = React.useRef<number>(0);
 
   const scroll = () => {
-    if(scrollContainer && scrollDir !== 0){
-      //if the scrollcontainer exists and the scroll direction isn't 0
-      //Increase the scrollTop value in the desired direction by 5
-      //Then loop through the animation again
-      scrollContainer.scrollTop = scrollContainer.scrollTop + 10 * scrollDir;
+    if(scrollDir !== 0){
+      if(scrollContainer){
+        scrollContainer.scrollTop = scrollContainer.scrollTop + 10 * scrollDir;
+      }
+      document.documentElement.scrollTop = document.documentElement.scrollTop + 2 * scrollDir;
+      document.body.scrollTop = document.body.scrollTop + 2 * scrollDir;
       scrollRef.current = requestAnimationFrame(scroll);
     }
   }
@@ -200,7 +201,7 @@ export function GridDropZone({
               } else if (placeholder) {
                 setPlaceholder(null);
               }
-
+              //if the user defines a different scroll container we use those boundaries instead of the window
               if(scrollContainer){
                 //touches top boundary
                 if(y <= scrollContainer.scrollTop){
@@ -208,6 +209,18 @@ export function GridDropZone({
                 }
                 //touches bottom boundary
                 else if(y + grid.rowHeight >= scrollContainer.scrollTop + scrollContainer.clientHeight){
+                  setScrollDir(1);
+                }
+                else{
+                  setScrollDir(0);
+                }
+              }else{
+                //touches top boundary
+                if(y <= window.scrollY){
+                  setScrollDir(-1);
+                }
+                //touches bottom boundary
+                else if(y + grid.rowHeight >= document.documentElement.scrollTop + document.documentElement.clientHeight){
                   setScrollDir(1);
                 }
                 else{
@@ -276,7 +289,7 @@ export function GridDropZone({
                   onStart,
                   grid,
                   dragging: i === draggingIndex,
-                  bounds
+                  bounds,
                 }}
               >
                 {child}
