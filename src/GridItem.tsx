@@ -37,7 +37,7 @@ export function GridItem({
     onEnd,
     grid,
     dragging: isDragging,
-    bounds
+    bounds,
   } = context;
 
   const { columnWidth, rowHeight } = grid;
