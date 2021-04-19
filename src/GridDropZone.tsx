@@ -61,8 +61,8 @@ export function GridDropZone({
       if(scrollContainer){
         scrollContainer.scrollTop = scrollContainer.scrollTop + 10 * scrollDir;
       }
-      document.documentElement.scrollTop = document.documentElement.scrollTop + 2 * scrollDir;
-      document.body.scrollTop = document.body.scrollTop + 2 * scrollDir;
+      document.documentElement.scrollTop = document.documentElement.scrollTop + 6 * scrollDir;
+      document.body.scrollTop = document.body.scrollTop + 6 * scrollDir;
       scrollRef.current = requestAnimationFrame(scroll);
     }
   }
