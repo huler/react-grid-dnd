@@ -208,7 +208,7 @@ export function GridDropZone({
                   setScrollDir(-1);
                 }
                 //touches bottom boundary
-                else if(y + grid.rowHeight >= scrollContainer.scrollTop + scrollContainer.clientHeight){
+                else if(y >= scrollContainer.scrollTop + scrollContainer.clientHeight - grid.rowHeight){
                   setScrollDir(1);
                 }
                 else{
@@ -220,7 +220,7 @@ export function GridDropZone({
                   setScrollDir(-1);
                 }
                 //touches bottom boundary
-                else if(y + grid.rowHeight >= document.documentElement.scrollTop + document.documentElement.clientHeight){
+                else if(y >= document.documentElement.scrollTop + document.documentElement.clientHeight - grid.rowHeight){
                   setScrollDir(1);
                 }
                 else{
@@ -289,7 +289,7 @@ export function GridDropZone({
                   onStart,
                   grid,
                   dragging: i === draggingIndex,
-                  bounds,
+                  scrollContainer
                 }}
               >
                 {child}
