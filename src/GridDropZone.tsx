@@ -216,7 +216,7 @@ export function GridDropZone({
                 }
               }else{
                 //touches top boundary
-                if(y <= window.scrollY){
+                if(y <= document.documentElement.scrollTop){
                   setScrollDir(-1);
                 }
                 //touches bottom boundary
