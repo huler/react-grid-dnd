@@ -76,12 +76,7 @@ export function GridItem({
     var x = startCoords.current[0] + state.delta[0];
     var y = startCoords.current[1] + state.delta[1];
 
-    /*if(e){
-      console.log('event', e);
-      console.log('state', state)
-    }*/
-
-    //if the user defines a different scroll container we use those boundaries instead of the window
+    //if they hit the scroll boundaries stick to that point
     if(scrollContainer){
       //touches top boundary
       if(y <= scrollContainer.scrollTop){
