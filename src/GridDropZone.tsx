@@ -61,8 +61,8 @@ export function GridDropZone({
       if(scrollContainer){
         scrollContainer.scrollTop = scrollContainer.scrollTop + 10 * scrollDir;
       }
-      document.documentElement.scrollTop = document.documentElement.scrollTop + 2 * scrollDir;
-      document.body.scrollTop = document.body.scrollTop + 2 * scrollDir;
+      document.documentElement.scrollTop = document.documentElement.scrollTop + 6 * scrollDir;
+      document.body.scrollTop = document.body.scrollTop + 6 * scrollDir;
       scrollRef.current = requestAnimationFrame(scroll);
     }
   }
@@ -208,7 +208,7 @@ export function GridDropZone({
                   setScrollDir(-1);
                 }
                 //touches bottom boundary
-                else if(y + grid.rowHeight >= scrollContainer.scrollTop + scrollContainer.clientHeight){
+                else if(y >= scrollContainer.scrollTop + scrollContainer.clientHeight - grid.rowHeight){
                   setScrollDir(1);
                 }
                 else{
@@ -216,11 +216,11 @@ export function GridDropZone({
                 }
               }else{
                 //touches top boundary
-                if(y <= window.scrollY){
+                if(y <= document.documentElement.scrollTop){
                   setScrollDir(-1);
                 }
                 //touches bottom boundary
-                else if(y + grid.rowHeight >= document.documentElement.scrollTop + document.documentElement.clientHeight){
+                else if(y >= document.documentElement.scrollTop + document.documentElement.clientHeight - grid.rowHeight){
                   setScrollDir(1);
                 }
                 else{
@@ -289,7 +289,7 @@ export function GridDropZone({
                   onStart,
                   grid,
                   dragging: i === draggingIndex,
-                  bounds,
+                  scrollContainer
                 }}
               >
                 {child}

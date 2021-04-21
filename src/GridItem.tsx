@@ -37,7 +37,7 @@ export function GridItem({
     onEnd,
     grid,
     dragging: isDragging,
-    bounds,
+    scrollContainer
   } = context;
 
   const { columnWidth, rowHeight } = grid;
@@ -71,10 +71,37 @@ export function GridItem({
     };
   });
 
+  function calculateY(state: StateType){
+    var y = startCoords.current[1] + state.delta[1];
+
+    //if they hit the scroll boundaries stick to that point
+    if(scrollContainer){
+      //touches top boundary
+      if(y <= scrollContainer.scrollTop){
+        y = scrollContainer.scrollTop;
+      }
+      //touches bottom boundary
+      else if(y >= scrollContainer.scrollTop + scrollContainer.clientHeight - grid.rowHeight){
+        y = scrollContainer.scrollTop + scrollContainer.clientHeight - grid.rowHeight;
+      }
+    }else{
+      //touches top boundary
+      if(y <= document.documentElement.scrollTop){
+        y = document.documentElement.scrollTop;
+      }
+      //touches bottom boundary
+      else if(y >= document.documentElement.scrollTop + document.documentElement.clientHeight - grid.rowHeight){
+        y = document.documentElement.scrollTop + document.documentElement.clientHeight - grid.rowHeight;
+      }
+    }
+
+    return y;
+  }
+
   // handle move updates imperatively
-  function handleMove(state: StateType, e: ResponderEvent) {
-    const x = startCoords.current[0] + state.delta[0];
-    const y = startCoords.current[1] + state.delta[1];
+  function handleMove(state: StateType, e: Object) {
+    var x = startCoords.current[0] + state.delta[0];
+    var y = calculateY(state);
 
     set({
       xy: [x, y],
