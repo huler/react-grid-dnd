@@ -1,4 +1,4 @@
-export function swap<T>(array: Array<T>, moveIndex: number, toIndex: number) {
+export function swap<T>(array: any, moveIndex: any, toIndex: any) {
   /* #move - Moves an array item from one position in an array to another.
      Note: This is a pure function so a new array will be returned, instead
      of altering the array argument.
