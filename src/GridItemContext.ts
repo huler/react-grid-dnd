@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StateType } from "react-gesture-responder";
 import { GridSettings } from "./grid-types";
+import { Bounds } from "./use-measure";
 
 export interface GridItemContextType {
   top: number;
@@ -15,6 +16,11 @@ export interface GridItemContextType {
   grid: GridSettings;
   dragging: boolean;
   scrollContainer: Element | null,
+  scrollOffsets: {
+    top: number;
+    bottom: number;
+  }
+  bounds: Bounds;
 }
 
 const noop = () => {

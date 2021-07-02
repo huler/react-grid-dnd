@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   StateType,
   useGestureResponder,
-  ResponderEvent
+  ResponderEvent,
 } from "react-gesture-responder";
 import { animated, interpolate, useSpring } from "react-spring";
 import { GridItemContext } from "./GridItemContext";
@@ -37,7 +37,9 @@ export function GridItem({
     onEnd,
     grid,
     dragging: isDragging,
-    scrollContainer
+    scrollContainer,
+    scrollOffsets,
+    bounds,
   } = context;
 
   const { columnWidth, rowHeight } = grid;
@@ -58,7 +60,8 @@ export function GridItem({
         immediate: true,
         zIndex: "1",
         scale: 1.1,
-        opacity: 0.8
+        opacity: 0.8,
+        position: "absolute",
       };
     }
 
@@ -67,33 +70,37 @@ export function GridItem({
       immediate: true,
       zIndex: "0",
       scale: 1,
-      opacity: 1
+      opacity: 1,
+      position: "absolute",
     };
   });
 
-  function calculateY(state: StateType){
+  function calculateY(state: StateType) {
     var y = startCoords.current[1] + state.delta[1];
 
+    if (y <= 0) return y;
+
+    const yRelativeTopBorder = y + scrollOffsets.top;
+    const yRelativeBottomBorder = y + scrollOffsets.top + grid.rowHeight;
+
     //if they hit the scroll boundaries stick to that point
-    if(scrollContainer){
+    // Not best solution and looks kind of buggy but only way I've found to stop them from losing the item they're dragging while they're scrolling
+    /* if (scrollContainer) {
       //touches top boundary
-      if(y <= scrollContainer.scrollTop){
-        y = scrollContainer.scrollTop;
+      if (yRelativeTopBorder <= scrollContainer.scrollTop) {
+        y = scrollContainer.scrollTop + scrollOffsets.top;
       }
       //touches bottom boundary
-      else if(y >= scrollContainer.scrollTop + scrollContainer.clientHeight - grid.rowHeight){
-        y = scrollContainer.scrollTop + scrollContainer.clientHeight - grid.rowHeight;
+      else if (
+        yRelativeBottomBorder >=
+        scrollContainer.scrollTop + scrollContainer.clientHeight
+      ) {
+        y =
+          scrollContainer.scrollTop +
+          scrollContainer.clientHeight -
+          grid.rowHeight;
       }
-    }else{
-      //touches top boundary
-      if(y <= document.documentElement.scrollTop){
-        y = document.documentElement.scrollTop;
-      }
-      //touches bottom boundary
-      else if(y >= document.documentElement.scrollTop + document.documentElement.clientHeight - grid.rowHeight){
-        y = document.documentElement.scrollTop + document.documentElement.clientHeight - grid.rowHeight;
-      }
-    }
+    } */
 
     return y;
   }
@@ -108,7 +115,7 @@ export function GridItem({
       zIndex: "1",
       immediate: true,
       opacity: 0.8,
-      scale: 1.1
+      scale: 1.1,
     });
 
     onMove(state, x, y);
@@ -124,7 +131,7 @@ export function GridItem({
 
   const { bind } = useGestureResponder(
     {
-      onMoveShouldSet: state => {
+      onMoveShouldSet: (state) => {
         if (disableDrag) {
           return false;
         }
@@ -144,10 +151,10 @@ export function GridItem({
         return true;
       },
       onTerminate: handleEnd,
-      onRelease: handleEnd
+      onRelease: handleEnd,
     },
     {
-      enableMouse: true
+      enableMouse: true,
     }
   );
 
@@ -163,7 +170,8 @@ export function GridItem({
         zIndex: "0",
         opacity: 1,
         scale: 1,
-        immediate: false
+        position: "absolute",
+        immediate: false,
       });
     }
   }, [dragging.current, left, top]);
@@ -177,7 +185,7 @@ export function GridItem({
     style: {
       cursor: !!disableDrag ? "grab" : undefined,
       zIndex: styles.zIndex,
-      position: "absolute",
+      position: styles.position,
       width: columnWidth + "px",
       opacity: styles.opacity,
       height: rowHeight + "px",
@@ -187,9 +195,9 @@ export function GridItem({
         (xy: any, s: any) =>
           `translate3d(${xy[0]}px, ${xy[1]}px, 0) scale(${s})`
       ),
-      ...style
+      ...style,
     },
-    ...other
+    ...other,
   };
 
   return typeof children === "function" ? (
@@ -197,7 +205,7 @@ export function GridItem({
       dragging: isDragging,
       disabled: !!disableDrag,
       i,
-      grid
+      grid,
     })
   ) : (
     <animated.div {...props}>{children}</animated.div>

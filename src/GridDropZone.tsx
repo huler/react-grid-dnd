@@ -16,6 +16,10 @@ export interface GridDropZoneProps
   disableDrag?: boolean;
   disableDrop?: boolean;
   style?: React.CSSProperties;
+  scrollOffsets: {
+    top: number;
+    bottom: number;
+  };
 }
 
 interface PlaceholderType {
@@ -31,6 +35,10 @@ export function GridDropZone({
   disableDrag = false,
   disableDrop = false,
   rowHeight,
+  scrollOffsets = {
+    top: 0,
+    bottom: 0,
+  },
   ...other
 }: GridDropZoneProps) {
   const {
@@ -203,42 +211,46 @@ export function GridDropZone({
               } else if (placeholder) {
                 setPlaceholder(null);
               }
-              //if the user defines a different scroll container we use those boundaries instead of the window
+
+              // If the user defines a scroll container use those bounds instead of the window
+              if (y <= 0 || y >= bounds.height) {
+                // If the item being dragged is outside of the grid itself don't scroll
+                setScrollDir(0);
+                return;
+              }
+
+              const yRelativeTopBorder = y + scrollOffsets.top;
+              const yRelativeBottomBorder =
+                y + scrollOffsets.top + grid.rowHeight;
               if (scrollContainer) {
-                //touches top boundary
-                if (y <= scrollContainer.scrollTop) {
+                if (yRelativeTopBorder <= scrollContainer.scrollTop) {
+                  // If touches the top boundary scroll up
                   setScrollDir(-1);
-                }
-                //touches bottom boundary
-                else if (
-                  y >=
-                  scrollContainer.scrollTop +
-                    scrollContainer.clientHeight -
-                    grid.rowHeight
+                } else if (
+                  yRelativeBottomBorder >=
+                  scrollContainer.clientHeight + scrollContainer.scrollTop
                 ) {
+                  // If touches the bottom boundary scroll down
                   setScrollDir(1);
                 } else {
                   setScrollDir(0);
                 }
               } else {
                 //touches top boundary
-                if (y <= document.documentElement.scrollTop) {
-                  console.log("touches top boundary");
-                  // This is broken on collections it thinks it's always at top boundary
-                  // setScrollDir(-1);
+                if (yRelativeTopBorder <= document.documentElement.scrollTop) {
+                  setScrollDir(-1);
                 }
                 //touches bottom boundary
                 else if (
-                  y >=
+                  yRelativeBottomBorder >=
                   document.documentElement.scrollTop +
-                    document.documentElement.clientHeight -
-                    grid.rowHeight
+                    document.documentElement.clientHeight
                 ) {
                   setScrollDir(1);
                 } else {
                   setScrollDir(0);
                 }
-              }
+              } 
             }
 
             /**
@@ -304,6 +316,8 @@ export function GridDropZone({
                   grid,
                   dragging: i === draggingIndex,
                   scrollContainer,
+                  scrollOffsets,
+                  bounds,
                 }}
               >
                 {child}
